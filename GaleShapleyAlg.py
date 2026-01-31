@@ -85,7 +85,7 @@ if mode == "match":
 elif mode == "verify":
 
     if len(sys.argv) != 4:
-        print("INVALID (usage: python GaleShepleyAlg.py verify instance.in output.out)")
+        print("INVALID (usage: python GaleShapleyAlg.py verify instance.in output.out)")
         sys.exit()
 
     instance_file = sys.argv[2]
@@ -119,7 +119,7 @@ elif mode == "verify":
         sys.exit()
 
     for line in out_lines:
-        parts = line.spit()
+        parts = line.split()
         if len(parts) != 2:
             print("INVALID (line is not two integers)")
             sys.exit()
@@ -171,5 +171,5 @@ elif mode == "verify":
 
 
 else:
-    print("INVALID (unkown mode, use 'match' or 'verify')")
+    print("INVALID (unknown mode, use 'match' or 'verify')")
     sys.exit()
