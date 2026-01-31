@@ -28,4 +28,4 @@ If you want to run our graph code, you have to have matplotlib installed.
 ## Graph and Solution
 Upon running our python code for the graph, we observed an exponential growth, which indicated a O(n^2) running time.
 
-![RuntimeGraph.png](RuntimeGraph.png)
+![RuntimeGraph.png](data/RuntimeGraph.png)
