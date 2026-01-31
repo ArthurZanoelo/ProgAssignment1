@@ -79,3 +79,97 @@ if mode == "match":
     # print output in required format (1-based)
     for h in range(n):
         print(h + 1, hospitalMatches[h] + 1)
+
+
+# verify mode
+elif mode == "verify":
+
+    if len(sys.argv) != 4:
+        print("INVALID (usage: python GaleShepleyAlg.py verify instance.in output.out)")
+        sys.exit()
+
+    instance_file = sys.argv[2]
+    output_file = sys.argv[3]
+
+    # Here we will delete all new lines
+    with open(instance_file) as f:
+        lines = [l.strip() for l in f.readlines() if l.strip()]
+
+    n = int(lines[0])
+
+    hospitalPrefs = []
+    studentPrefs = []
+
+    for i in range (1, n + 1):
+        hospitalPrefs.append([int(x) - 1 for x in lines[i].split()])
+
+    for i in range(n + 1, 2 * n + 1):
+        studentPrefs.append([int(x) - 1 for x in lines[i].split()])
+
+    with open(output_file) as f:
+        out_lines = [l.strip() for l in f.readlines() if l.strip()]
+
+    # VALIDITY CHECK
+    hospitalMatches = [-1] * n
+    studentMatches = [-1] * n
+
+    # Outputs created come with one new line
+    if len(out_lines) != n:
+        print("INVALID (wrong number of lines)")
+        sys.exit()
+
+    for line in out_lines:
+        parts = line.spit()
+        if len(parts) != 2:
+            print("INVALID (line is not two integers)")
+            sys.exit()
+
+        h, s = map(int, parts)
+        h -= 1
+        s -= 1
+
+        if not (0 <= h < n and 0 <= s < n):
+            print("INVALID (id out of range)")
+            sys.exit()
+
+        if hospitalMatches[h] != -1 or studentMatches[s] != -1:
+            print("INVALID (duplicate match)")
+            sys.exit()
+
+        hospitalMatches[h] = s
+        studentMatches[s] = h
+
+    if -1 in hospitalMatches or -1 in studentMatches:
+        print("INVALID (someone unmatched)")
+        sys.exit()
+
+    # STABILITY CHECK
+
+    # Build student ranking
+    studentRank = [[0] * n for _ in range(n)]
+    for s in range (n):
+        for rank, h in enumerate(studentPrefs[s]):
+            studentRank[s][h] = rank
+
+    # Check blocking pairs
+    for h in range(n):
+        assignedStudent = hospitalMatches[h]
+
+        for s in hospitalPrefs[h]:
+
+            # Stop once we hit their assigned partner
+            if s == assignedStudent:
+                break
+
+            currentHospital = studentMatches[s]
+
+            if studentRank[s][h] < studentRank[s][currentHospital]:
+                print(f"UNSTABLE (blocking pair: hospital {h +1}, student {s + 1}")
+                sys.exit()
+
+    print("VALID STABLE")
+
+
+else:
+    print("INVALID (unkown mode, use 'match' or 'verify')")
+    sys.exit()
