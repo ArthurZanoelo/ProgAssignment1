@@ -4,7 +4,8 @@ Arthur Zanoelo (93116277) and Matthew Beutel (35151278)
 ## How to Compile
 This program is written in python so you only need to run it.
 
-Just remember to cd to the correct folder.
+Just remember to run it from the src folder:
+```cd src```
 
 ## How to Run Matching Algorithm
 Given an input file (example.in), in PowerShell run:
@@ -12,6 +13,9 @@ Given an input file (example.in), in PowerShell run:
 (To print out results in terminal)
 
 ```Get-Content example.in | python GaleShapleyAlg.py match```
+
+(Remember to open the input file from the correct location, so for instance if you wanted to run the example.in in our data folder you would run):
+```Get-Content ../data/example.in | python GaleShapleyAlg.py match```
 
 (To create new file with output)
 
