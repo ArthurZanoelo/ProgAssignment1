@@ -27,3 +27,39 @@ def match_time(n):
     )
 
     return time.perf_counter() - start
+
+def verify_time(n):
+    data = instance(n)
+
+    match = subprocess.run(
+        [sys.executable, "GaleShapleyAlg.py", "match"],
+        input = data.encode(),
+        stdout=subprocess.PIPE
+    ).stdout
+
+    open("tmp.in", "w").write(data)
+    open("tmp.out", "wb").write(match)
+
+    start = time.perf_counter()
+
+    subprocess.run(
+        [sys.executable, "GaleShapleyAlg.py", "verify", "tmp.in", "tmp.out"],
+        stdout = subprocess.PIPE
+    )
+
+    return time.perf_counter() - start
+
+match_times = [match_time(n) for n in NS]
+verify_times = [verify_time(n) for n in NS]
+
+plt.plot(NS, match_times, marker="o", label="Matcher")
+plt.plot(NS, verify_times, marker="o", label="Verifier")
+
+plt.xscale("log", base=2)
+plt.xlabel("Number of Hospitals/Students (n)")
+plt.ylabel("Running Time (seconds)")
+plt.title("Gale-Shapley Scalability")
+plt.legend()
+plt.grid(True)
+
+plt.show()
